@@ -1,52 +1,62 @@
 import React, {useState} from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./style";
 
 import {Result} from "../result";
-import {getCotacao} from "../../../services/api";
+import getCotacao from "../../../service/api";
 
 
-export default function Form() {
-    //secao da logica
+export default function Form(){
+    //Seção da logica
     const [real, setReal] = useState(null);
+    const [msg, setMsg] = useState(null);
     const [resultado, setResultado] = useState(null);
-    const [msg, setMsg] = useState("");
     const [cotacao, setCotacao] = useState(null);
 
-    //funcao que e chamada pelo botao da tela
-    function validar() {
+    //Funcao que é chamada pelo botão da tela
+    function validar(){
 
-        if(real!=null){
+
+        if(real != null ){
+
+            console.log("Converter")
+
             converter()
             setReal(null)
+
         }else{
-            setMsg("Informe um valor para conversão")
+            setMsg("Informe um valor a ser convertido")
             setResultado(null)
         }
 
     }
 
-    //funcao que faz a chamada da API e converte o valor
     async function converter() {
+        console.log("antes da cotação")
         const aux = await getCotacao()
+        console.log("depois da cotação")
 
         setCotacao(aux[0])
         setMsg(aux[1])
 
-        return setResultado((real/cotacao).toFixed(2))
 
+        console.log("Formulario")
+        console.log(cotacao)
+        console.log(msg)
+        
+        
+        return setResultado((real/cotacao).toFixed(2))
     }
 
 
-//secao da montagem da tela
+    //Seção da montagem da tela
     return(
 
         <View style={styles.formContext}>
             <View style={styles.form}>
-                <Text style={styles.formLabel}>
-                    Real
-                </Text>
-                <TextInput
+
+                <Text style={styles.formLabel}>Real</Text>
+                <TextInput 
                     style={styles.TextInput}
                     keyboardType="numeric"
                     value={real}
@@ -56,16 +66,15 @@ export default function Form() {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {validar()}}
+                    onPress={() => { validar() }}
                 >
-                    <Text style={styles.textButton}>
-                        Converter para Dólar
-                    </Text>
+                    <Text style={styles.textButton}>Converter para U$</Text>
                 </TouchableOpacity>
-                <Result msg={msg} valor={resultado}/>
+
+            </View>
+            
+            <Result cotacao={cotacao} msg={msg} valor={resultado}/>
 
         </View>
-        </View>
-    )
-
+    );
 }

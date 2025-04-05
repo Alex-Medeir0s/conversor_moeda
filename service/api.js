@@ -1,31 +1,23 @@
 import axios from "axios";
 
-export default async function getCotacao(){
-
-    var url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
-    var result = []
+export default async function getCotacao() {
+    const url = "https://economia.awesomeapi.com.br/json/last/USD-BRL";
+    let result = [];
 
     await axios.get(url)
     .then(function (response) {
+        const data = response.data;
+        const ask = data.USDBRL.ask;
+        const name = data.USDBRL.name;
 
-        //recupera toda a resposta da chamada da API, metodo GET
-        const data = response.data
-
-        const ask = data.USDBRL.ask
-        const name = data.USDBRL.name
-
-        results = [ask, name]
-        console.log("Cotacao do dia")
-        console.log(ask)
-        console.log(name)
-
+        result = [ask, name];
+        console.log("Cotacao do dia");
+        console.log(ask);
+        console.log(name);
     })
     .catch(function (error) {
         console.log(error);
-    })
+    });
 
-    return results
-
-
-
+    return result;
 }
